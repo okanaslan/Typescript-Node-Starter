@@ -7,7 +7,7 @@
         "start": "ts-node src/app.ts",
         "test": "jest",
         "format": "prettier --config .prettierrc.json --write {./{src,test}/{**,}/**.ts,./*.{json,js}}",
-        "lint": "npx eslint . --ext .ts",
+        "lint": "eslint . --ext .ts",
         "build": "tsc -p ./tsconfig.json",
         "prepare": "husky install"
     },
@@ -36,7 +36,7 @@
     },
     "lint-staged": {
         "*.{js,json,ts}": [
-            "eslint --cache --fix",
+            "eslint . --ext .ts",
             "npm run format"
         ]
     }
