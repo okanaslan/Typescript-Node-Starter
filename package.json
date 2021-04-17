@@ -4,8 +4,12 @@
   "description": "Node.js starter package written in Typescript.",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "npx eslint . --ext .ts"
+    "format": "prettier --config .prettierrc.json --write ./src/**/**.ts",
+    "lint": "npx eslint . --ext .ts",
+    "build": "tsc -p ./tsconfig.json",
+    "prepare": "husky install"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +23,15 @@
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
     "eslint": "^7.22.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "typescript": "^4.2.3"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
   }
 }
