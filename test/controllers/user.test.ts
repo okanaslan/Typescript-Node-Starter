@@ -8,8 +8,8 @@ describe("# User", () => {
     let mongo: Connection;
 
     beforeAll(async () => {
-        const env = config();
-        if (env.error == null && process.env.MongoURI != null) {
+        config();
+        if (process.env.MongoURI != null) {
             try {
                 mongo = await Database.connect(process.env.MongoURI!);
             } catch (error) {
