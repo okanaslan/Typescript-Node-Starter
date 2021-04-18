@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x, 15.x]
-    env:
-      MongoURI: ${{ secrets.MongoURI }}
     steps:
+      - env:
+          MongoURI: ${{ secrets.MongoURI }}
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
