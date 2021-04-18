@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  MongoURI: ${{ secrets.MONGOURI }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,5 +18,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+        env:
+          MongoURI: ${{ secrets.MONGOURI }}
       - run: npm ci
       - run: npm test
