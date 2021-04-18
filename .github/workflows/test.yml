@@ -19,8 +19,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
         env:
-          MongoURI: ${{ secrets.MONGOURI }}
+          MongoURI: ${{ secrets.MONGO_URI }}
       - run: npm ci
       - run: npm test
-        env:
-          MongoURI: ${{ secrets.MONGOURI }}
