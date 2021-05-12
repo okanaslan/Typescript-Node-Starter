@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 
 export class UserController {
-    static get(request: Request, response: Response): void {
-        request.method;
+    static get(_request: Request, response: Response): void {
         response.json({
             username: "okanaslan",
         });

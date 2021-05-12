@@ -1,14 +1,14 @@
 import { User, UserDocument } from "../src/models/user";
 
-type Model = UserDocument;
+type Document = UserDocument;
 
 export class Factory {
-    static generate<T extends Model, K extends keyof Model>(object: T, args?: { field: K; value: T[K] }[]): Model {
-        let temp: Model;
+    static generate<M, D extends Document, K extends keyof D>(object: M, args?: { field: K; value: D[K] }[]): D {
+        let temp: D;
         if (object instanceof User) {
-            temp = this.generateUser();
+            temp = this.generateUser<D>();
         } else {
-            temp = object;
+            throw Error(`${object} is not a valid model!`);
         }
 
         if (args) {
@@ -19,7 +19,7 @@ export class Factory {
         return temp;
     }
 
-    static generateMany<T extends Model, K extends keyof Model>(object: T, args: { field: K; value: T[K] }[], size: number): Model[] {
+    static generateMany<D extends Document, K extends keyof D>(object: D, args: { field: K; value: D[K] }[], size: number): D[] {
         const array = [];
         for (let i = 0; i < size; i++) {
             array.push(Factory.generate(object, args));
@@ -27,9 +27,10 @@ export class Factory {
         return array;
     }
 
-    private static generateUser(): UserDocument {
+    private static generateUser<D extends Document>(): D {
         const user = new User();
         user.username = "user";
-        return user;
+
+        return user as D;
     }
 }
