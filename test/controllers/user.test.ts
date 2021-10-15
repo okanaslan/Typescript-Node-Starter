@@ -1,37 +1,25 @@
-import { server } from "../../src/server";
-import supertest from "supertest";
-import { Database } from "../../src/database";
-import { Connection } from "mongoose";
-import { config } from "dotenv";
+import { TestRunner } from "../testRunner";
 
-describe("# User", () => {
-    let mongo: Connection;
+import { IResponseBody } from "../../src/interfaces/Response";
+import { IGetUserResponseData } from "../../src/entities/user/interfaces";
 
+describe("# Dataset", () => {
     beforeAll(async () => {
-        config();
-        if (process.env.MongoURI != null) {
-            try {
-                mongo = await Database.connect(process.env.MongoURI!);
-            } catch (error) {
-                fail(error);
-            }
-        } else {
-            fail("Environment Error");
-        }
+        await TestRunner.initialize();
     });
 
-    afterAll(async () => {
-        try {
-            await mongo.close();
-        } catch (error) {
-            fail(error);
-        }
+    afterAll((done) => {
+        TestRunner.deinitialize(done);
     });
 
     describe("Get /user", () => {
+        const path = "/user";
+
         test("Should return a user.", async () => {
-            const response = await supertest(server).get("/user").auth("", { type: "bearer" }).set("Accept", "application/json");
-            expect(response.body.username).toBe("okanaslan");
+            const response = await TestRunner.get(`${path}?limit=1`);
+            const body = response.body as IResponseBody<IGetUserResponseData>;
+            expect(body.status.success).toBe(true);
+            expect(body.data?.user.username).toBe("okanaslan");
         });
     });
 });

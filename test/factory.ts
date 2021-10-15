@@ -1,4 +1,4 @@
-import { User, UserDocument } from "../src/models/user";
+import { User, UserDocument } from "../src/entities/user/model";
 
 type Document = UserDocument;
 
