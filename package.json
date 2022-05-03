@@ -9,6 +9,7 @@
         "format": "prettier --config .prettierrc --write .",
         "lint": "eslint . --ext .ts",
         "build": "tsc -p ./tsconfig.json",
+        "build:bash": "bash -c tsc -p ./tsconfig.json",
         "prepare": "husky install",
         "docker:start": "docker-compose up -d",
         "docker:stop": "docker-compose down"
@@ -42,7 +43,7 @@
     },
     "lint-staged": {
         "*.{js,json,ts}": [
-            "npm run build",
+            "npm run build:bash",
             "npm run lint",
             "npm run format"
         ]
