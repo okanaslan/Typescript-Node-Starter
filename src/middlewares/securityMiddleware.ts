@@ -31,7 +31,7 @@ export class SecurityMiddleware {
         "/nmaplowercheck1651048135",
     ];
 
-    static secureEndpoints = ["user"];
+    static secureEndpoints = ["user", "api-docs"];
 
     static async check(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
@@ -39,12 +39,12 @@ export class SecurityMiddleware {
             const isSecurePath = request.path == "/" || SecurityMiddleware.secureEndpoints.includes(request.path.split("/")[1] ?? "");
 
             if (isSecurityIssue) {
-                Logger.warn("Security issue!", { request, response });
+                Logger.critical("Security issue!", { request, response });
                 response.json(createErrorResponse("Security issue!", { request, response }));
                 return;
             }
             if (!isSecurePath) {
-                Logger.warn("Not a valid endpoint", { request, response });
+                Logger.critical("Not a valid endpoint", { request, response });
                 response.json(createErrorResponse("Not a valid endpoint", { request, response }));
                 return;
             } else {

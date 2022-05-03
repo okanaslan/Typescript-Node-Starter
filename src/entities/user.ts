@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 
 export enum UserType {
     basic = "basic",
@@ -6,7 +6,7 @@ export enum UserType {
 }
 
 export interface User {
-    id: Types.ObjectId;
+    id: string;
     type: UserType;
     email: string;
 }

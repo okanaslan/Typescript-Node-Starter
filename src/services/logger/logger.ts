@@ -5,8 +5,12 @@ import { LogLevel } from "./types/Severity";
 export class Logger {
     static silent?: boolean = false;
 
+    static isSilent(options?: LoggerOptions) {
+        return options?.silent == true || Logger.silent;
+    }
+
     static log(message: unknown, options?: LoggerOptions) {
-        if (options?.silent == true || Logger.silent) {
+        if (Logger.isSilent(options)) {
             return;
         } else {
             console.log(message);
@@ -14,7 +18,7 @@ export class Logger {
     }
 
     static debug(message: unknown, options?: LoggerOptions) {
-        if (options?.silent == true || Logger.silent) {
+        if (Logger.isSilent(options)) {
             return;
         } else {
             console.debug(message);
@@ -22,7 +26,7 @@ export class Logger {
     }
 
     static info(message: unknown, options?: LoggerOptions) {
-        if (options?.silent == true || Logger.silent) {
+        if (Logger.isSilent(options)) {
             return;
         } else {
             console.info(message);
@@ -30,29 +34,34 @@ export class Logger {
     }
 
     static warn(message: unknown, options?: LoggerOptions) {
-        if (options?.silent == true || Logger.silent) {
+        if (Logger.isSilent(options)) {
             return;
         } else {
-            this.sendSentry(message, LogLevel.warn, options);
+            this.sendToErrorLogger(message, LogLevel.warn, options);
             console.warn(message);
         }
     }
 
     static error(message: unknown, options?: LoggerOptions) {
-        if (options?.silent == true || Logger.silent) {
+        if (Logger.isSilent(options)) {
             return;
         } else {
-            this.sendSentry(message, LogLevel.error, options);
+            this.sendToErrorLogger(message, LogLevel.error, options);
             console.error(message);
         }
     }
 
     static fatal(message: unknown, options?: LoggerOptions) {
-        this.sendSentry(message, LogLevel.fatal, options);
+        this.sendToErrorLogger(message, LogLevel.fatal, options);
         console.error(message);
     }
 
-    static sendSentry(message: unknown, level: LogLevel, options?: LoggerOptions) {
+    static critical(message: unknown, options?: LoggerOptions) {
+        this.sendToErrorLogger(message, LogLevel.critical, options);
+        console.error(message);
+    }
+
+    static sendToErrorLogger(message: unknown, level: LogLevel, options?: LoggerOptions) {
         const optionsString = JSON.stringify({
             args: options?.args,
             request:

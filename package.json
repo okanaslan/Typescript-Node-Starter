@@ -4,7 +4,7 @@
     "description": "Node.js starter package written in Typescript.",
     "main": "index.js",
     "scripts": {
-        "start": "ts-node src/app.ts",
+        "start": "ts-node src/index.ts",
         "test": "jest",
         "format": "prettier --config .prettierrc --write .",
         "lint": "eslint . --ext .ts",
@@ -24,6 +24,9 @@
         "express": "4.18.1",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "6.3.2",
+        "openapi3-ts": "^2.0.2",
+        "swagger-ui-express": "^4.3.0",
+        "ts-json-schema-generator": "^1.0.0",
         "ts-node": "10.7.0",
         "typescript": "4.6.4"
     },
@@ -31,6 +34,7 @@
         "@types/jest": "27.5.0",
         "@types/jsonwebtoken": "^8.5.8",
         "@types/supertest": "2.0.12",
+        "@types/swagger-ui-express": "^4.1.3",
         "@typescript-eslint/eslint-plugin": "5.22.0",
         "@typescript-eslint/parser": "5.22.0",
         "eslint": "8.14.0",

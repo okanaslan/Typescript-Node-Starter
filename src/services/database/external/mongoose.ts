@@ -4,10 +4,10 @@ export class Mongoose {
     static database: Database;
 
     static async connect() {
-        const databaseURL = process.env["ATLAS_URI"];
-        if (databaseURL == null) throw new Error("DB URI is null");
+        const databaseURI = process.env["MongoURI"];
+        if (databaseURI == null) throw new Error("Database URI is null");
 
-        Mongoose.database = await connect(databaseURL);
+        Mongoose.database = await connect(databaseURI);
     }
 
     static async get() {

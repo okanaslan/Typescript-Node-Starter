@@ -16,4 +16,4 @@ const getUser = async (request: Request<ParameterType, BodyType, QueryType>, _re
     return { user };
 };
 
-export const getUserEndpoint = new EndPoint<DataType, ParameterType, BodyType, QueryType>("/user/:userId", RestMethod.get, getUser);
+export const getUserEndpoint = new EndPoint<DataType, ParameterType, BodyType, QueryType>("/user/:userId", RestMethod.get, getUser, __filename);

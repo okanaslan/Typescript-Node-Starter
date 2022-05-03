@@ -1,6 +1,6 @@
 import { sign, verify } from "jsonwebtoken";
 
-export class jsonwebtoken {
+export class JsonWebToken {
     static sign(data: object, secret: string, options?: { expiresIn?: number }) {
         const token = sign(data, secret, options);
         return token;

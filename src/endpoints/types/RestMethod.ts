@@ -1,6 +1,6 @@
 export enum RestMethod {
-    get,
-    post,
-    put,
-    delete,
+    get = "get",
+    post = "post",
+    put = "put",
+    delete = "delete",
 }

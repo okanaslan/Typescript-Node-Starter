@@ -1,5 +1,5 @@
 import { User } from "../../entities/user";
-import { jsonwebtoken } from "./external/jsonwebtoken";
+import { JsonWebToken } from "./external/jsonWebToken";
 import { TokenPayload } from "./types/TokenPayload";
 
 export class Auth {
@@ -7,7 +7,7 @@ export class Auth {
         const secret = process.env["JWT_SECRET"];
         if (secret == null) throw new Error("Secret is missing");
 
-        const token = jsonwebtoken.sign({ id: user.id }, secret, {
+        const token = JsonWebToken.sign({ id: user.id }, secret, {
             expiresIn: 86400,
         });
         return token;
@@ -17,7 +17,7 @@ export class Auth {
         const secret = process.env["JWT_SECRET"];
         if (secret == null) throw new Error("Secret is missing");
 
-        const data = jsonwebtoken.verify(token, secret) as TokenPayload;
+        const data = JsonWebToken.verify(token, secret) as TokenPayload;
         return data;
     }
 }

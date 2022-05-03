@@ -6,16 +6,31 @@ import { RestHandler } from "./types/RestHandler";
 import { RestMethod } from "./types/RestMethod";
 import { ResponseBody } from "./types/ResponseBody";
 import { Locals } from "./types/Locals";
+import { Documentation } from "../services/documentation/documentation";
+import { DocumentationInput } from "../services/documentation/types/DocumentationInput";
 
 export class EndPoint<DataType, ParameterType extends ParamsDictionary, BodyType, QueryType extends Query> {
+    filePath: string;
     endpoint: string;
     method: RestMethod;
     handler: RestHandler<DataType, ParameterType, BodyType, QueryType>;
 
-    constructor(endpoint: string, method: RestMethod, handler: RestHandler<DataType, ParameterType, BodyType, QueryType>) {
+    constructor(endpoint: string, method: RestMethod, handler: RestHandler<DataType, ParameterType, BodyType, QueryType>, filePath: string) {
+        this.filePath = filePath;
         this.endpoint = endpoint;
         this.method = method;
         this.handler = handler;
+
+        this.document();
+    }
+
+    document() {
+        const input: DocumentationInput = {
+            endpoint: this.endpoint,
+            method: this.method,
+            filePath: this.filePath,
+        };
+        Documentation.add(input);
     }
 
     async call(request: Request<ParameterType, ResponseBody<DataType>, BodyType, QueryType, Locals>, response: Response<ResponseBody<DataType>, Locals>) {
