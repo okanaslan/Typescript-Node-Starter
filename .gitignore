@@ -81,8 +81,5 @@ typings/
 # JS
 dist
 
-# Husky
-.husky
-
 # Docker
 data
