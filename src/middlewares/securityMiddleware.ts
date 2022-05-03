@@ -51,7 +51,7 @@ export class SecurityMiddleware {
                 next();
             }
         } catch (error) {
-            Logger.error(error, { request, response });
+            Logger.error(error as string, { request, response });
             response.json(createErrorResponse(error, { request, response }));
         }
     }

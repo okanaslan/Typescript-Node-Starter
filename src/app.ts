@@ -3,6 +3,7 @@ import { Database } from "./services/database/database";
 import { Server } from "./server";
 import { Logger } from "./services/logger/logger";
 import { Documentation } from "./services/documentation/documentation";
+import { Sentry } from "./services/logger/external/sentry";
 
 export class App {
     static server = new Server();
@@ -14,9 +15,10 @@ export class App {
         try {
             await Database.connect();
             await Server.start(port);
-            await Documentation.serve(Server.expressServer);
+            Sentry.initialize(Server.expressServer);
+            Documentation.serve(Server.expressServer);
         } catch (error) {
-            Logger.error(error);
+            Logger.error(error as string);
             process.exit(1);
         }
     };

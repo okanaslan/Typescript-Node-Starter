@@ -20,7 +20,10 @@ export class OpenAPI3 {
         },
         servers: [{ url: "http://localhost:{port}", description: "Local", variables: { port: { default: "3000" } } }],
         paths: {},
-        tags: [{ name: "user", description: "User related endpoints" }],
+        tags: [
+            { name: "user", description: "User related endpoints" },
+            { name: "auth", description: "Auth related endpoints" },
+        ],
         components: { schemas: {} },
     });
 

@@ -12,9 +12,12 @@ export class Sentry {
 
         init({
             dsn: sentryDNS,
-            integrations: [new Integrations.Http({ tracing: true }), new TracingIntegrations.Express({ app: expressServer })],
+            integrations: [
+                new Integrations.Http({ tracing: true }),
+                new TracingIntegrations.Express({ app: expressServer, router: expressServer.routes, methods: ["get", "post", "delete"] }),
+            ],
             tracesSampleRate: 1.0,
-            environment: "Development",
+            environment: process.env["NODE_ENV"],
         });
         expressServer.use(Handlers.requestHandler());
         expressServer.use(Handlers.tracingHandler());

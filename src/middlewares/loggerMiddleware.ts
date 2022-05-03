@@ -8,7 +8,8 @@ export class LoggerMiddleware {
         const body = JSONUtils.stringfyD1(request.body);
         const query = JSONUtils.stringfyD1(request.query);
         const params = JSONUtils.stringfyD1(request.params);
-        const log = `${request.method} ${request.path} BODY: ${body} Query: ${query} PARAMS: ${params}`;
+        const headers = JSONUtils.stringfyD1(request.headers);
+        const log = `${request.method} ${request.path} Body: ${body} Query: ${query} Params: ${params} Headers: ${headers}`;
 
         Logger.log(log);
 

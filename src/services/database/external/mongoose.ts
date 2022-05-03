@@ -4,7 +4,7 @@ export class Mongoose {
     static database: Database;
 
     static async connect() {
-        const databaseURI = process.env["MongoURI"];
+        const databaseURI = process.env["MONGO_URI"];
         if (databaseURI == null) throw new Error("Database URI is null");
 
         Mongoose.database = await connect(databaseURI);

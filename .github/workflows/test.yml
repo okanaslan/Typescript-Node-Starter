@@ -21,4 +21,4 @@ jobs:
             - run: npm ci
             - run: npm test
               env:
-                  MongoURI: ${{ secrets.MONGO_URI }}
+                  MONGO_URI: ${{ secrets.MONGO_URI }}

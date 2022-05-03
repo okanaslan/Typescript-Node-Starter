@@ -5,10 +5,12 @@ import { SecurityMiddleware } from "./middlewares/securityMiddleware";
 import { LoggerMiddleware } from "./middlewares/loggerMiddleware";
 import { AuthMiddleware } from "./middlewares/authMiddleware";
 
-import { Logger } from "./services/logger/logger";
-import { getUserEndpoint } from "./endpoints/user/getUsers";
 import { EndPoint } from "./endpoints/endpoint";
-import { RestMethod } from "./endpoints/imports";
+import { Logger } from "./services/logger/logger";
+import { RestMethod } from "./endpoints/types/RestMethod";
+
+import { getUserEndpoint } from "./endpoints/user/getUsers";
+import { loginEndpoint } from "./endpoints/auth/login";
 
 export class Server {
     static expressServer = express();
@@ -18,18 +20,19 @@ export class Server {
         Server.expressServer.use(express.json());
         Server.expressServer.use(express.urlencoded({ extended: false }));
 
-        // MARK: Middlewares
+        // Middlewares
         Server.expressServer.use(LoggerMiddleware.log);
         Server.expressServer.use(SecurityMiddleware.check);
         Server.expressServer.use(AuthMiddleware.auth);
 
         // Endpoints
         Server.add(getUserEndpoint);
+        Server.add(loginEndpoint);
 
         try {
             Server.httpServer = Server.expressServer.listen({ port }, () => Logger.info(`Service ready at port: ${port}`));
         } catch (error) {
-            Logger.error(error);
+            Logger.error(error as string);
             process.exit(1);
         }
     };
@@ -57,7 +60,7 @@ export class Server {
                 Logger.info("Server closed");
                 done();
             } else {
-                Logger.error(error);
+                Logger.error(error.message);
                 done(error);
             }
         });

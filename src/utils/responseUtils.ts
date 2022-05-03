@@ -12,7 +12,7 @@ export function createResponse<DataType>(data?: DataType, index?: number, error?
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createErrorResponse(error: unknown, options?: LoggerOptions): ResponseBody<any> {
-    Logger.error(error, options);
+    Logger.error(error as string, options);
     if (error instanceof Error) {
         return createResponse<unknown>(undefined, undefined, error);
     } else if (typeof error == "string") {

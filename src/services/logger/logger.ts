@@ -9,7 +9,7 @@ export class Logger {
         return options?.silent == true || Logger.silent;
     }
 
-    static log(message: unknown, options?: LoggerOptions) {
+    static log(message: string, options?: LoggerOptions) {
         if (Logger.isSilent(options)) {
             return;
         } else {
@@ -17,7 +17,7 @@ export class Logger {
         }
     }
 
-    static debug(message: unknown, options?: LoggerOptions) {
+    static debug(message: string, options?: LoggerOptions) {
         if (Logger.isSilent(options)) {
             return;
         } else {
@@ -25,7 +25,7 @@ export class Logger {
         }
     }
 
-    static info(message: unknown, options?: LoggerOptions) {
+    static info(message: string, options?: LoggerOptions) {
         if (Logger.isSilent(options)) {
             return;
         } else {
@@ -33,7 +33,7 @@ export class Logger {
         }
     }
 
-    static warn(message: unknown, options?: LoggerOptions) {
+    static warn(message: string, options?: LoggerOptions) {
         if (Logger.isSilent(options)) {
             return;
         } else {
@@ -42,7 +42,7 @@ export class Logger {
         }
     }
 
-    static error(message: unknown, options?: LoggerOptions) {
+    static error(message: string, options?: LoggerOptions) {
         if (Logger.isSilent(options)) {
             return;
         } else {
@@ -51,17 +51,17 @@ export class Logger {
         }
     }
 
-    static fatal(message: unknown, options?: LoggerOptions) {
+    static fatal(message: string, options?: LoggerOptions) {
         this.sendToErrorLogger(message, LogLevel.fatal, options);
         console.error(message);
     }
 
-    static critical(message: unknown, options?: LoggerOptions) {
+    static critical(message: string, options?: LoggerOptions) {
         this.sendToErrorLogger(message, LogLevel.critical, options);
         console.error(message);
     }
 
-    static sendToErrorLogger(message: unknown, level: LogLevel, options?: LoggerOptions) {
+    static sendToErrorLogger(message: string, level: LogLevel, options?: LoggerOptions) {
         const optionsString = JSON.stringify({
             args: options?.args,
             request:
