@@ -1,36 +1,24 @@
-import { User, UserDocument } from "../src/entities/user/model";
-
-type Document = UserDocument;
+import { User, userModel } from "../src/entities/user";
 
 export class Factory {
-    static generate<M, D extends Document, K extends keyof D>(object: M, args?: { field: K; value: D[K] }[]): D {
-        let temp: D;
-        if (object instanceof User) {
-            temp = this.generateUser<D>();
-        } else {
-            throw Error(`${object} is not a valid model!`);
-        }
+    static user: Partial<User> = {
+        email: "user@mail.com",
+    };
 
-        if (args) {
-            for (const arg of args) {
-                temp[arg.field] = arg.value;
+    private static updateFields<DataType>(data: DataType, partial?: Partial<DataType>) {
+        if (partial != null) {
+            for (const key of Object.keys(partial)) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                data[key as keyof DataType] = partial[key as keyof DataType];
             }
         }
-        return temp;
+        return data;
     }
 
-    static generateMany<D extends Document, K extends keyof D>(object: D, args: { field: K; value: D[K] }[], size: number): D[] {
-        const array = [];
-        for (let i = 0; i < size; i++) {
-            array.push(Factory.generate(object, args));
-        }
-        return array;
-    }
-
-    private static generateUser<D extends Document>(): D {
-        const user = new User();
-        user.username = "user";
-
-        return user as D;
+    static async generateUser(partial?: Partial<User>): Promise<User> {
+        const data = Factory.updateFields(Factory.user, partial);
+        const user = await userModel.create({ ...data });
+        return user;
     }
 }

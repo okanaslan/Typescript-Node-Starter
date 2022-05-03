@@ -1,59 +1,63 @@
-import { Connection } from "mongoose";
-import express, { Express } from "express";
-import { Server as HTTPServer } from "http";
+import express from "express";
+import { Server as httpServer } from "http";
 
-import { router } from "./routes";
-import { Database } from "./database";
-import { NodeEnvironment } from "./enums/NodeEnvironment";
+import { SecurityMiddleware } from "./middlewares/securityMiddleware";
+import { LoggerMiddleware } from "./middlewares/loggerMiddleware";
+import { AuthMiddleware } from "./middlewares/authMiddleware";
+
+import { Logger } from "./services/logger/logger";
+import { getUserEndpoint } from "./endpoints/user/getUsers";
+import { EndPoint } from "./endpoints/endpoint";
+import { RestMethod } from "./endpoints/imports";
 
 export class Server {
-    nodeEnvironment: NodeEnvironment;
+    static expressServer = express();
+    static httpServer?: httpServer;
 
-    expressApp: Express;
-    httpServer?: HTTPServer;
-    mongoConnection?: Connection;
+    static start = async (port?: number): Promise<void> => {
+        Server.expressServer.use(express.json());
+        Server.expressServer.use(express.urlencoded({ extended: false }));
 
-    constructor(nodeEnvironment: NodeEnvironment) {
-        this.nodeEnvironment = nodeEnvironment;
-        this.expressApp = express();
-        this.expressApp.use(express.json()); // for parsing application/json
-        this.expressApp.use(express.urlencoded({ extended: false })); // for parsing application/x-www-form-urlencoded
+        // MARK: Middlewares
+        Server.expressServer.use(LoggerMiddleware.log);
+        Server.expressServer.use(SecurityMiddleware.check);
+        Server.expressServer.use(AuthMiddleware.auth);
 
-        this.expressApp.use(router);
-    }
+        // Endpoints
+        Server.add(getUserEndpoint);
 
-    async startServer(port?: number) {
-        switch (this.nodeEnvironment) {
-            case NodeEnvironment.test:
-                this.httpServer = this.expressApp.listen(() => {
-                    console.info(`Express application listening at http://localhost`);
-                });
+        try {
+            Server.httpServer = Server.expressServer.listen({ port }, () => Logger.info(`Service ready at port: ${port}`));
+        } catch (error) {
+            Logger.error(error);
+            process.exit(1);
+        }
+    };
+
+    static add(endpoint: EndPoint<any, any, any, any>) {
+        switch (endpoint.method) {
+            case RestMethod.get:
+                Server.expressServer.get(getUserEndpoint.endpoint, getUserEndpoint.call);
                 break;
-            case NodeEnvironment.local:
-                this.httpServer = this.expressApp.listen(port ?? 3000, "Localhost", () => {
-                    console.info(`Express application listening at http://localhost:3000`);
-                });
+            case RestMethod.put:
+                Server.expressServer.put(getUserEndpoint.endpoint, getUserEndpoint.call);
                 break;
-            default:
-                this.httpServer = this.expressApp.listen(port ?? 3000, () => {
-                    console.info(`${this.nodeEnvironment} Express application listening at port: ${port ?? 3000}.`);
-                });
+            case RestMethod.post:
+                Server.expressServer.post(getUserEndpoint.endpoint, getUserEndpoint.call);
+                break;
+            case RestMethod.delete:
+                Server.expressServer.delete(getUserEndpoint.endpoint, getUserEndpoint.call);
+                break;
         }
     }
 
-    async connectDatabase() {
-        this.mongoConnection = await Database.connectDefault();
-        console.info(`Database connected to ${this.mongoConnection.host}:${this.mongoConnection.port}/${this.mongoConnection.db.databaseName}`);
-    }
-
-    async stopServer(done: (error?: any) => void) {
-        await this.mongoConnection?.close();
-        this.httpServer?.close((error) => {
+    static stop(done: (error?: Error) => void) {
+        Server.httpServer?.close((error) => {
             if (error == null) {
-                console.info("Server closed");
+                Logger.info("Server closed");
                 done();
             } else {
-                console.error(error);
+                Logger.error(error);
                 done(error);
             }
         });

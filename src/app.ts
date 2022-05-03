@@ -1,15 +1,25 @@
-import { NodeEnvironment } from "./enums/NodeEnvironment";
-import { config } from "dotenv";
+import { Mongoose } from "mongoose";
+import { Database } from "./services/database/database";
 import { Server } from "./server";
+import { Logger } from "./services/logger/logger";
 
-config();
-const nodeEnvironment = NodeEnvironment[(process.env.NodeEnvironment ?? "local") as keyof typeof NodeEnvironment];
-export const WordGame = new Server(nodeEnvironment);
+export class App {
+    static server = new Server();
+    static database = new Mongoose();
 
-WordGame.connectDatabase()
-    .then(() => {
-        WordGame.startServer();
-    })
-    .catch((error) => {
-        console.error(error);
-    });
+    static start = async () => {
+        const port = parseInt(process.env["PORT"] ?? "3000");
+
+        try {
+            await Database.connect();
+            await Server.start(port);
+        } catch (error) {
+            Logger.error(error);
+            process.exit(1);
+        }
+    };
+
+    static async stop() {
+        await Database.close();
+    }
+}

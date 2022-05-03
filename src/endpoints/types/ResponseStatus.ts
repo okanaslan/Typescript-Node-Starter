@@ -1,4 +1,4 @@
-export interface IResponseStatus {
+export interface ResponseStatus {
     success: boolean;
     reason?: string;
 }

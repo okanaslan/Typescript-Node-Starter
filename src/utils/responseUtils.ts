@@ -1,6 +1,8 @@
-import { IResponseBody } from "../interfaces/Response";
+import { LoggerOptions } from "../services/logger/types/LoggerOptions";
+import { ResponseBody } from "../endpoints/types/ResponseBody";
+import { Logger } from "../services/logger/logger";
 
-export function createResponse<DataType>(data?: DataType, index?: number, error?: Error): IResponseBody<DataType> {
+export function createResponse<DataType>(data?: DataType, index?: number, error?: Error): ResponseBody<DataType> {
     if (error == null) {
         return { status: { success: true }, data, index };
     } else {
@@ -8,13 +10,15 @@ export function createResponse<DataType>(data?: DataType, index?: number, error?
     }
 }
 
-export function createErrorResponse<DataType>(error: unknown): IResponseBody<DataType> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createErrorResponse(error: unknown, options?: LoggerOptions): ResponseBody<any> {
+    Logger.error(error, options);
     if (error instanceof Error) {
-        return createResponse<DataType>(undefined, undefined, error);
+        return createResponse<unknown>(undefined, undefined, error);
     } else if (typeof error == "string") {
-        return createResponse<DataType>(undefined, undefined, new Error(error));
+        return createResponse<unknown>(undefined, undefined, new Error(error));
     } else {
-        console.log(`Unknown Error: ${error}`);
-        return createResponse<DataType>(undefined, undefined, new Error(`Unknown Error: ${error}`));
+        Logger.error(`Unknown error structure error: ${error}`);
+        return createResponse<unknown>(undefined, undefined, new Error(`Unknown error: ${error}`));
     }
 }

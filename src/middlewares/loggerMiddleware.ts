@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from "express";
-import { NodeEnvironment } from "../enums/NodeEnvironment";
+
 import { JSONUtils } from "../utils/JSONUtils";
+import { Logger } from "../services/logger/logger";
 
 export class LoggerMiddleware {
     static log(request: Request, _response: Response, next: NextFunction): void {
@@ -9,9 +10,7 @@ export class LoggerMiddleware {
         const params = JSONUtils.stringfyD1(request.params);
         const log = `${request.method} ${request.path} BODY: ${body} Query: ${query} PARAMS: ${params}`;
 
-        if (process.env.NodeEnvironment == NodeEnvironment[NodeEnvironment.development]) {
-            console.info(log);
-        }
+        Logger.log(log);
 
         next();
     }
