@@ -1,7 +1,6 @@
 import { Request } from "express";
 import { Entry, Log, Logging } from "@google-cloud/logging";
 import { NodeEnvironment } from "../../../types/NodeEnvironment";
-import { Logger } from "../logger";
 
 export class Google {
     static logger: Log;
@@ -28,11 +27,7 @@ export class Google {
 
     static async info(data: any, request?: Request<any, any, any>): Promise<void> {
         if (process.env.NODE_ENV == NodeEnvironment[NodeEnvironment.production]) {
-            try {
-                await Google.logger.info(new Entry({ timestamp: new Date(), httpRequest: request }, data));
-            } catch (error) {
-                Logger.error(error as string);
-            }
+            await Google.logger.info(new Entry({ timestamp: new Date(), httpRequest: request }, data));
         } else {
             console.log(data);
         }

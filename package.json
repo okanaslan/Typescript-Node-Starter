@@ -11,6 +11,8 @@
         "build": "tsc -p ./tsconfig.json",
         "build:bash": "bash -c tsc -p ./tsconfig.json",
         "prepare": "husky install",
+        "dependecy:graph": "madge --image graph.svg src/index.ts",
+        "dependecy:list": "madge src/index.ts",
         "docker:start": "docker-compose up -d",
         "docker:stop": "docker-compose down"
     },
@@ -42,6 +44,7 @@
         "husky": "7.0.4",
         "jest": "28.0.3",
         "lint-staged": "12.4.1",
+        "madge": "^5.0.1",
         "prettier": "^2.6.2",
         "supertest": "6.2.3",
         "ts-jest": "28.0.0"

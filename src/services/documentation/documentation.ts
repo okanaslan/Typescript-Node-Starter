@@ -1,5 +1,6 @@
 import { Express } from "express";
 import { OpenAPI3 } from "./external/openAPI3";
+import { SwaggerUIExpress } from "./external/swaggerUIExpress";
 import { DocumentationInput } from "./types/DocumentationInput";
 
 export class Documentation {
@@ -12,6 +13,7 @@ export class Documentation {
     }
 
     static serve(expressServer: Express) {
-        OpenAPI3.serve(expressServer);
+        const documentation = Documentation.get();
+        SwaggerUIExpress.serve(expressServer, documentation);
     }
 }

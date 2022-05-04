@@ -30,7 +30,11 @@ export class Logger {
         if (Logger.isSilent(options)) {
             return;
         } else {
-            Google.info(message, options?.request);
+            try {
+                Google.info(message, options?.request);
+            } catch (error) {
+                Logger.error(error as string);
+            }
         }
     }
 

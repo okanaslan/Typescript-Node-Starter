@@ -1,6 +1,4 @@
-import { Express } from "express";
 import { OpenApiBuilder, SchemaObject } from "openapi3-ts";
-import { SwaggerUIExpress } from "../external/swaggerUIExpress";
 
 import { TSJsonSchemaGenerator } from "../external/tsJsonSchemaGenerator";
 
@@ -53,9 +51,5 @@ export class OpenAPI3 {
             doc.components.schemas = undefined;
         }
         return doc;
-    }
-
-    static serve(expressServer: Express) {
-        SwaggerUIExpress.serve(expressServer);
     }
 }
