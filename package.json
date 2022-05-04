@@ -17,6 +17,7 @@
     "author": "okanaslan",
     "license": "ISC",
     "dependencies": {
+        "@google-cloud/logging": "^9.8.3",
         "@sentry/node": "^6.19.7",
         "@sentry/tracing": "^6.19.7",
         "@types/express": "4.17.13",

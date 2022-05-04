@@ -1,4 +1,4 @@
-import { EndPoint, Request, Response, RestMethod, Empty } from "../imports";
+import { EndPoint, Request, RestMethod, Empty } from "../imports";
 import { User, userModel } from "../../entities/user";
 
 export type DataType = {
@@ -10,7 +10,7 @@ export type ParameterType = {
 export type BodyType = Empty;
 export type QueryType = Empty;
 
-const getUser = async (request: Request<ParameterType, BodyType, QueryType>, _response: Response): Promise<DataType> => {
+const getUser = async (request: Request<ParameterType, BodyType, QueryType>): Promise<DataType> => {
     const { userId } = request.params;
     const user = await userModel.findById(userId);
     return { user };

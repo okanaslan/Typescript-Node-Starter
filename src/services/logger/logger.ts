@@ -1,3 +1,4 @@
+import { Google } from "./external/google";
 import { Sentry } from "./external/sentry";
 import { LoggerOptions } from "./types/LoggerOptions";
 import { LogLevel } from "./types/Severity";
@@ -29,7 +30,7 @@ export class Logger {
         if (Logger.isSilent(options)) {
             return;
         } else {
-            console.info(message);
+            Google.info(message, options?.request);
         }
     }
 
