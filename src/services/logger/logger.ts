@@ -1,3 +1,5 @@
+import { Express } from "express";
+
 import { Google } from "./external/google";
 import { Sentry } from "./external/sentry";
 import { LoggerOptions } from "./types/LoggerOptions";
@@ -5,6 +7,11 @@ import { LogLevel } from "./types/Severity";
 
 export class Logger {
     static silent?: boolean = false;
+
+    static initialize(server: Express) {
+        Google.initialize("API");
+        Sentry.initialize(server);
+    }
 
     static isSilent(options?: LoggerOptions) {
         return options?.silent == true || Logger.silent;

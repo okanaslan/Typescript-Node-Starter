@@ -1,17 +1,17 @@
 import { connect, Mongoose as Database, Types } from "mongoose";
 
-export class Mongoose {
+export class Mongo {
     static database: Database;
 
     static async connect() {
         const databaseURI = process.env["MONGO_URI"];
         if (databaseURI == null) throw new Error("Database URI is null");
 
-        Mongoose.database = await connect(databaseURI);
+        Mongo.database = await connect(databaseURI);
     }
 
     static async get() {
-        return Mongoose.database;
+        return Mongo.database;
     }
 
     static async close() {

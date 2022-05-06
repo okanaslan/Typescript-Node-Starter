@@ -1,17 +1,17 @@
 import { config } from "dotenv";
-import { Mongoose } from "./external/mongoose";
+import { Mongo } from "./external/mongo";
 
 export class Database {
-    static async connect() {
+    static async initialize() {
         config();
-        await Mongoose.connect();
+        await Mongo.connect();
     }
 
     static async get() {
-        return Mongoose.database;
+        return Mongo.database;
     }
 
     static async close() {
-        await Mongoose.get();
+        await Mongo.get();
     }
 }
