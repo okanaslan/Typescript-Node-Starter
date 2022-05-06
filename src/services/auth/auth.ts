@@ -1,5 +1,5 @@
 import { User } from "../../entities/user";
-import { JsonWebToken } from "./external/jsonWebToken";
+import { JsonWebToken } from "./external/jwt";
 import { TokenPayload } from "./types/TokenPayload";
 
 export class Auth {
