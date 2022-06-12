@@ -18,7 +18,7 @@ Node.js starter package written in Typescript.
         -   openapi3-ts: enables writing type safe docs.
         -   swagger-ui-express: servers basic UI for the documentation.
 -   Database:
-    -   MongoDB w/ mongoose
+    -   MongoDB w/ mongodb
 -   Security:
     -   JWT: basic auth mechanism
     -   Sentry: error logging

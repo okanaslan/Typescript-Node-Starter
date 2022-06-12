@@ -1,6 +1,6 @@
-import { captureException, init, Integrations, Handlers, Severity } from "@sentry/node";
+import { captureException, init, Integrations, Handlers } from "@sentry/node";
 import { Integrations as TracingIntegrations } from "@sentry/tracing";
-import { ScopeContext } from "@sentry/types";
+import { ScopeContext, SeverityLevel } from "@sentry/types";
 import { Express } from "express";
 import { LogContext } from "../types/LogContext";
 import { LogLevel } from "../types/Severity";
@@ -30,14 +30,14 @@ export class Sentry {
     }
 
     private static convertLogContext(context: Partial<LogContext>): Partial<ScopeContext> {
-        const levelMapping: { [key: string]: Severity } = {};
-        levelMapping[LogLevel.debug] = Severity.Debug;
-        levelMapping[LogLevel.log] = Severity.Log;
-        levelMapping[LogLevel.info] = Severity.Info;
-        levelMapping[LogLevel.warn] = Severity.Warning;
-        levelMapping[LogLevel.error] = Severity.Error;
-        levelMapping[LogLevel.fatal] = Severity.Fatal;
-        levelMapping[LogLevel.critical] = Severity.Critical;
+        const levelMapping: { [key: string]: SeverityLevel } = {};
+        levelMapping[LogLevel.debug] = "debug";
+        levelMapping[LogLevel.log] = "log";
+        levelMapping[LogLevel.info] = "info";
+        levelMapping[LogLevel.warn] = "warning";
+        levelMapping[LogLevel.error] = "error";
+        levelMapping[LogLevel.fatal] = "fatal";
+        levelMapping[LogLevel.critical] = "fatal";
 
         const sentryLog = {
             level: context.level != null ? levelMapping[context.level] : undefined,

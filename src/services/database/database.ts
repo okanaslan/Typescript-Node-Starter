@@ -1,17 +1,19 @@
 import { config } from "dotenv";
+import { Db } from "mongodb";
 import { Mongo } from "./external/mongo";
 
 export class Database {
+    static connection: Mongo;
+    static instance: Db;
+
     static async initialize() {
         config();
-        await Mongo.connect();
-    }
-
-    static async get() {
-        return Mongo.database;
+        const mongo = new Mongo();
+        Database.connection = mongo;
+        Database.instance = await mongo.connect();
     }
 
     static async close() {
-        await Mongo.get();
+        await Database.connection?.close();
     }
 }

@@ -1,7 +1,6 @@
 import { LogLevel } from "./Severity";
 
-interface User {
-    [key: string]: any;
+interface User extends Record<string, any> {
     id?: string;
     ip_address?: string;
     email?: string;

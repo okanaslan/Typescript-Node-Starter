@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Database } from "../services/database/database";
 
 export enum UserType {
     basic = "basic",
@@ -11,14 +11,4 @@ export interface User {
     email: string;
 }
 
-const userSchema = new Schema<User>(
-    {
-        type: { type: String, enum: UserType, default: UserType.basic },
-        email: { type: String, required: true, unique: true },
-    },
-    {
-        timestamps: true,
-    }
-);
-
-export const userModel = model("User", userSchema);
+export const userCollection = Database.instance.collection<User>("user");

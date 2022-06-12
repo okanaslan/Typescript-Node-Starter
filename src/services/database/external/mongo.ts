@@ -1,28 +1,30 @@
-import { connect, Mongoose as Database, Types } from "mongoose";
+import { Db, MongoClient, ObjectId } from "mongodb";
 
 export class Mongo {
-    static database: Database;
+    client: MongoClient;
 
-    static async connect() {
+    constructor() {
         const databaseURI = process.env["MONGO_URI"];
         if (databaseURI == null) throw new Error("Database URI is null");
 
-        Mongo.database = await connect(databaseURI);
+        this.client = new MongoClient(databaseURI);
     }
 
-    static async get() {
-        return Mongo.database;
+    async connect(): Promise<Db> {
+        await this.client.connect();
+        const database = this.client.db();
+        return database;
     }
 
-    static async close() {
-        await this.database?.connection.close();
+    async close() {
+        await this.client?.close();
     }
 
-    static toOBjectId(id: string): Types.ObjectId {
-        return new Types.ObjectId(id);
+    static toOBjectId(id: string): ObjectId {
+        return new ObjectId(id);
     }
 
-    static generateId(): Types.ObjectId {
-        return new Types.ObjectId();
+    static generateId(): ObjectId {
+        return new ObjectId();
     }
 }

@@ -15,13 +15,15 @@ export class EndPoint<DataType, ParameterType extends ParamsDictionary, BodyType
     method: RestMethod;
     handler: RestHandler<DataType, ParameterType, BodyType, QueryType>;
 
+    static endpoints: EndPoint<any, any, any, any>[] = [];
+
     constructor(endpoint: string, method: RestMethod, handler: RestHandler<DataType, ParameterType, BodyType, QueryType>, filePath: string) {
         this.filePath = filePath;
         this.endpoint = endpoint;
         this.method = method;
         this.handler = handler;
 
-        this.document();
+        EndPoint.endpoints.push(this);
     }
 
     document() {

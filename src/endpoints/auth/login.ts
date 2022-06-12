@@ -1,5 +1,5 @@
 import { EndPoint, Request, Response, RestMethod, Empty } from "../imports";
-import { User, userModel } from "../../entities/user";
+import { User, userCollection } from "../../entities/user";
 
 export type DataType = {
     user: User | null;
@@ -12,7 +12,7 @@ export type QueryType = Empty;
 
 const login = async (_request: Request<ParameterType, BodyType, QueryType>, response: Response): Promise<DataType> => {
     const { userId } = response.locals;
-    const user = await userModel.findById(userId);
+    const user = await userCollection.findOne({ id: userId });
     return { user };
 };
 

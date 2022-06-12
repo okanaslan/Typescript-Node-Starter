@@ -1,4 +1,4 @@
-import { User, userModel } from "../src/entities/user";
+import { User, userCollection } from "../src/entities/user";
 
 export class Factory {
     static user: Partial<User> = {
@@ -18,7 +18,8 @@ export class Factory {
 
     static async generateUser(partial?: Partial<User>): Promise<User> {
         const data = Factory.updateFields(Factory.user, partial);
-        const user = await userModel.create({ ...data });
+        const id = await userCollection.insertOne({ ...(data as User) });
+        const user = (await userCollection.findOne({ id })) as User;
         return user;
     }
 }

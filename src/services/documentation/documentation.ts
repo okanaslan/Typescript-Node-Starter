@@ -4,6 +4,10 @@ import { SwaggerUIExpress } from "./external/swaggerUIExpress";
 import { DocumentationInput } from "./types/DocumentationInput";
 
 export class Documentation {
+    static create() {
+        OpenAPI3.documentEveryting();
+    }
+
     static add(input: DocumentationInput) {
         OpenAPI3.add(input);
     }

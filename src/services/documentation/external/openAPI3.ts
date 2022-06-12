@@ -1,9 +1,10 @@
 import { OpenApiBuilder, SchemaObject } from "openapi3-ts";
 
-import { TSJsonSchemaGenerator } from "../external/tsJsonSchemaGenerator";
+import { JsonSchemaGenerator } from "./jsonSchemaGenerator";
 
 import { DocumentationInput } from "../types/DocumentationInput";
 import { DocumentationOutput } from "../types/DocumentationOutput";
+import { EndPoint } from "../../../endpoints/endpoint";
 
 export class OpenAPI3 {
     static openAPI = new OpenApiBuilder({
@@ -25,7 +26,7 @@ export class OpenAPI3 {
         components: { schemas: {} },
     });
 
-    private static addToSchemas(schemas: { [key: string]: SchemaObject }) {
+    private static addToSchemas(schemas: Record<string, SchemaObject>) {
         for (const key of Object.keys(schemas)) {
             const additionalSchema = schemas[key];
             if (additionalSchema != null) {
@@ -39,9 +40,21 @@ export class OpenAPI3 {
     }
 
     static add(input: DocumentationInput) {
-        const doc = TSJsonSchemaGenerator.generateDocumentation(input);
+        const doc = JsonSchemaGenerator.generateDocumentation(input);
         OpenAPI3.addToPath(doc);
-        OpenAPI3.addToSchemas(doc.additionalSchemas);
+        if (doc.additionalSchemas != null) {
+            OpenAPI3.addToSchemas(doc.additionalSchemas);
+        }
+    }
+
+    static documentEveryting() {
+        const definitions = JsonSchemaGenerator.documentFolder("./src");
+        if (definitions != null) {
+            OpenAPI3.addToSchemas(definitions);
+        }
+        EndPoint.endpoints.forEach((endpoint) => {
+            endpoint.document();
+        });
     }
 
     static get() {
